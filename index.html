@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#102c36">
+<title>Run time calculator</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Run Time">
+<link rel="apple-touch-icon" href="./icon.png">
+<style>
+:root{color-scheme:light;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#15323c;background:#edf3f3}*{box-sizing:border-box}body{margin:0;padding:32px 20px;padding:max(32px,env(safe-area-inset-top)) max(20px,env(safe-area-inset-right)) max(32px,env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left))}main{max-width:820px;margin:auto}.eyebrow{font-size:12px;font-weight:750;letter-spacing:.16em;text-transform:uppercase;color:#46716f}h1{font-size:clamp(30px,5vw,42px);letter-spacing:-.045em;margin:10px 0}header p{color:#526b73;line-height:1.6;margin:0 0 28px}.card{background:#fff;border:1px solid #d7e3e4;border-radius:24px;padding:28px;box-shadow:0 12px 36px #183f4807}fieldset{border:0;padding:0;margin:0 0 28px;min-width:0}legend{font-size:19px;font-weight:700;margin-bottom:14px}.number{display:inline-grid;place-items:center;width:27px;height:27px;background:#e5f3ef;color:#246c5c;border-radius:50%;font-size:14px;margin-right:9px}.fields{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:12px}label{display:flex;flex-direction:column;gap:8px;font-size:12px;font-weight:650;color:#587078}input{width:100%;min-width:0;border:1.5px solid #c9d9dc;background:#f8fbfb;border-radius:12px;text-align:center;padding:16px 4px;font:600 clamp(24px,4vw,34px)/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;color:#183a45;appearance:textfield}input:focus-visible,button:focus-visible{outline:3px solid #27a78b;outline-offset:3px}input[aria-invalid=true]{border-color:#b83232;background:#fff7f5}.result{background:#102f3a;color:white;border-radius:18px;padding:25px;text-align:center}.result-label{text-transform:uppercase;letter-spacing:.14em;font-size:12px;color:#a8d2d0;font-weight:700}output{display:block;font:600 clamp(30px,7vw,58px)/1.35 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:-.045em;margin:8px 0;overflow-wrap:anywhere}.format{font-size:12px;color:#b5cdcf}.message{min-height:24px;margin:14px 0 0;color:#60757c;font-size:14px;text-align:center;line-height:1.5}.message.error{color:#a12c2c}.actions{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:20px}button{font:650 15px system-ui;cursor:pointer;min-height:48px;padding:12px 20px;border:1px solid #c8d8db;background:white;border-radius:12px;color:#294c55}button:active{background:#e5efed}footer{font-size:12px;color:#657c82;text-align:center;line-height:1.7;margin:22px 0 0}.offline{font-size:12px;color:#3d6b60}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#398c70;margin-right:6px}@media(max-width:480px){body{padding:24px 12px}.card{padding:20px 15px;border-radius:19px}.fields{gap:8px}input{padding:16px 2px}label{font-size:11px}.result{padding:22px 10px}}
+</style>
+</head>
+<body>
+<main>
+<header><div class="eyebrow">Stopwatch companion</div><h1>Every run, down to the hundredth.</h1><p>Enter the cumulative stopwatch readings at the start and finish.<br>The elapsed run time is calculated automatically.</p></header>
+<section class="card" aria-label="Run time calculator">
+<form id="calculator" autocomplete="off" novalidate>
+<fieldset><legend><span class="number">1</span>Start time</legend><div class="fields" id="start-fields"><label>Hours<input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="00" id="start-hours" aria-label="start hours" aria-describedby="message" data-max="9999"></label><label>Minutes<input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="00" id="start-minutes" aria-label="start minutes" aria-describedby="message" data-max="59"></label><label>Seconds<input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="00" id="start-seconds" aria-label="start seconds" aria-describedby="message" data-max="59"></label><label>Hundredths<input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="00" id="start-hundredths" aria-label="start hundredths" aria-describedby="message" data-max="99"></label></div></fieldset>
+<fieldset><legend><span class="number">2</span>Finish time</legend><div class="fields" id="finish-fields"><label>Hours<input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="00" id="finish-hours" aria-label="finish hours" aria-describedby="message" data-max="9999"></label><label>Minutes<input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="00" id="finish-minutes" aria-label="finish minutes" aria-describedby="message" data-max="59"></label><label>Seconds<input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="00" id="finish-seconds" aria-label="finish seconds" aria-describedby="message" data-max="59"></label><label>Hundredths<input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="00" id="finish-hundredths" aria-label="finish hundredths" aria-describedby="message" data-max="99"></label></div></fieldset>
+<div class="result"><div class="result-label" id="result-label">Run time</div><output id="result" aria-labelledby="result-label" aria-live="polite" aria-atomic="true">—</output><div class="format">hours : minutes : seconds . hundredths</div></div>
+<p id="message" class="message" role="status">Enter both readings to calculate a run time.</p>
+<div class="actions"><span class="offline" id="offline-status">Preparing offline access…</span><button type="reset">Clear times</button></div>
+</form>
+</section>
+<footer>Finish − start = run time. Minutes and seconds must be 00–59.<br>Use hours for longer readings. Empty individual fields count as zero.</footer>
+</main>
+<script>
+'use strict';
+const units=[['hours','Hours',9999,4],['minutes','Minutes',59,2],['seconds','Seconds',59,2],['hundredths','Hundredths',99,2]];
+document.querySelectorAll('input').forEach(input=>input.addEventListener('focus',()=>input.select()));
+const form=document.getElementById('calculator'),result=document.getElementById('result'),message=document.getElementById('message');
+function parseReading(kind){
+ const fields=units.map(([unit])=>document.getElementById(kind+'-'+unit));
+ let invalid=false;
+ const numbers=fields.map(input=>{const raw=input.value.trim();const valid=raw===''||(/^\d+$/.test(raw)&&Number(raw)<=Number(input.dataset.max));input.setAttribute('aria-invalid',String(!valid));if(!valid)invalid=true;return raw===''?0:Number(raw)});
+ return {empty:fields.every(input=>input.value.trim()===''),invalid,total:((numbers[0]*60+numbers[1])*60+numbers[2])*100+numbers[3]};
+}
+function formatTime(total){const fraction=total%100;const seconds=Math.floor(total/100)%60;const minutes=Math.floor(total/6000)%60;const hours=Math.floor(total/360000);const pad=n=>String(n).padStart(2,'0');return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}.${pad(fraction)}`}
+function calculate(){
+ const start=parseReading('start'),finish=parseReading('finish');let text='';let error=false;result.textContent='—';
+ if(start.invalid||finish.invalid){text='Use whole numbers: hours 0–9999, minutes and seconds 0–59, hundredths 0–99.';error=true}
+ else if(start.empty||finish.empty){text='Enter both readings to calculate a run time. For a zero reading, enter 0 in any field.'}
+ else if(finish.total<start.total){text='Finish time must be equal to or later than start time. Check the cumulative readings.';error=true}
+ else{result.textContent=formatTime(finish.total-start.total);text='Elapsed time between your two stopwatch readings.'}
+ message.textContent=text;message.classList.toggle('error',error);
+}
+form.addEventListener('input',calculate);
+form.addEventListener('submit',event=>event.preventDefault());
+form.addEventListener('reset',()=>{setTimeout(()=>{calculate();document.getElementById('start-hours').focus()},0)});
+if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+ window.addEventListener('load', async () => {
+  const status = document.getElementById('offline-status');
+  try {
+   await navigator.serviceWorker.register('./sw.js');
+   await navigator.serviceWorker.ready;
+   status.textContent = 'Ready to use offline';
+  } catch (_) { status.textContent = 'Offline setup failed. Reload online to retry.'; }
+ });
+} else { document.getElementById('offline-status').textContent = 'Local offline file'; }
+</script>
+</body>
+</html>
